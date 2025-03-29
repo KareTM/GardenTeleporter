@@ -1,4 +1,11 @@
 {
   "key.gardenteleporter.plotscreen": "Open Garden Teleporter",
-  "category.gardenteleporter.keys": "Garden Teleporter Menu"
+  "key.gardenteleporter.keyscreen": "Open Garden Teleporter Keybinds",
+  "category.gardenteleporter.keys": "Garden Teleporter Menu",
+  "controls.gardenteleporter.title": "Garden Teleporter Keybinds",
+  "key.gardenteleporter.key1": "Row/Column 1 Selector",
+  "key.gardenteleporter.key2": "Row/Column 2 Selector",
+  "key.gardenteleporter.key3": "Row/Column 3 Selector",
+  "key.gardenteleporter.key4": "Row/Column 4 Selector",
+  "key.gardenteleporter.key5": "Row/Column 5 Selector"
 }

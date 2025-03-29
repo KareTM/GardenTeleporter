@@ -20,12 +20,6 @@ public class PlotGrabber {
             new ItemStack(Items.SPRUCE_PLANKS)
     );
 
-    private static final List<Integer> plotNumbers = List.of(21, 13, 9, 14, 22,
-            15, 5, 1, 6, 16,
-            10, 2, 3, 11,
-            17, 7, 4, 8, 18,
-            23, 19, 12, 20, 24);
-
     private static final long COOLDOWN_TIME = 10000;
     private static long lastActionTime = 0;
 
@@ -60,7 +54,7 @@ public class PlotGrabber {
         // Create a list to store the plot data
         List<PlotData> plotDataList = new ArrayList<>();
 
-        int plotNum = 0;
+        int plotNum = 1;
         // Assuming plot items are in specific slots, iterate over the slots
         for (int i = 0; i < 54; i++) {
             Slot slot = screenHandler.getSlot(i);
@@ -81,7 +75,7 @@ public class PlotGrabber {
                 }
 
                 // Store the plot data
-                plotDataList.add(new PlotData(plotName, itemStack.getItem(), plotNumbers.get(plotNum++)));
+                plotDataList.add(new PlotData(plotName, itemStack.getItem(), plotNum++));
             }
         }
 

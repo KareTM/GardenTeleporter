@@ -20,13 +20,16 @@ public class PlotButton {
     private final int x;
     private final int y;
     private final Item itemIcon;
+    private final int number;
     private final ButtonWidget buttonWidget;
+    public boolean active;
 
-    public PlotButton(int x, int y, String name, Item itemIcon
-    ) {
+    public PlotButton(int x, int y, String name, Item itemIcon, int number) {
         this.x = x;
         this.y = y;
         this.itemIcon = itemIcon;
+        this.number = number;
+        this.active = true;
 
         boolean isUnknown = name.equals("UNKNOWN PLOT");
 
@@ -43,33 +46,64 @@ public class PlotButton {
                     }
 
                     MinecraftClient.getInstance().setScreen(null);
-                })
-                .dimensions(x, y, buttonSize, buttonSize)  // Button width and height
-                .tooltip(tt)
-                .build();
+                }).dimensions(x, y, buttonSize, buttonSize)  // Button width and height
+                .tooltip(tt).build();
     }
 
     public static PlotButton fromPlotData(PlotData plotData, Map<Integer, Position> map) {
         var pos = map.get(plotData.getNumber());
-        return new PlotButton(pos.getX(), pos.getY(), plotData.getName(), plotData.getIcon());
+        return new PlotButton(pos.getX(), pos.getY(), plotData.getName(), plotData.getIcon(), plotData.getNumber());
     }
 
     public static PlotButton createBarn(Map<Integer, Position> map) {
         var pos = map.get(0);
-        return new PlotButton(pos.getX(), pos.getY(), "Barn", Items.SPRUCE_PLANKS);
+        return new PlotButton(pos.getX(), pos.getY(), "Barn", Items.SPRUCE_PLANKS, 0);
     }
 
     public static PlotButton createEmpty(Map<Integer, Position> map) {
         var pos = map.get(0);
-        return new PlotButton(pos.getX(), pos.getY(), "UNKNOWN PLOT", Items.BARRIER);
+        return new PlotButton(pos.getX(), pos.getY(), "UNKNOWN PLOT", Items.BARRIER, -1);
+    }
+
+    public static int[] getButtonRowCol(int buttonNumber) {
+        // Center position is (2, 2) for button 0
+        if (buttonNumber == -1) {
+            return new int[]{-1, -1};
+        }
+
+        if (buttonNumber == 0) {
+            return new int[]{2, 2};
+        }
+
+
+        int row = (buttonNumber - 1) / 5;
+        int col = (buttonNumber - 1) % 5;
+
+        // If the button number is greater than 12, we shift the row position
+        if (buttonNumber > 12) {
+            col++;
+            if (col == 5) {
+                col = 0;
+                row++;
+            }
+        }
+
+        return new int[]{row, col};
     }
 
     public void render(DrawContext context) {
+        if (!this.active) {
+            return;
+        }
         int offset = 2;
         context.drawItem(new ItemStack(itemIcon), x + offset, y + offset);  // Draw a diamond shape at the button's position
     }
 
     public ButtonWidget getButtonWidget() {
         return buttonWidget;
+    }
+
+    public int getNumber() {
+        return number;
     }
 }
