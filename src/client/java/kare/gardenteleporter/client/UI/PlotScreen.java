@@ -2,11 +2,11 @@ package kare.gardenteleporter.client.UI;
 
 import kare.gardenteleporter.client.PlotData.PlotData;
 import kare.gardenteleporter.client.UI.util.ButtonPositionMapper;
+import kare.gardenteleporter.client.keybinds.KeybindHolder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -15,13 +15,13 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class PlotScreen extends Screen {
     private final List<PlotData> plotDataList;
-    private final List<KeyBinding> keyBindings;
+    private final List<KeybindHolder> keyBindings;
     private boolean selectedRow;
     private int selectedRowIndex;
     // List to store buttons
     List<PlotButton> buttons;
 
-    public PlotScreen(List<PlotData> plotDataList, List<KeyBinding> keyBindings) {
+    public PlotScreen(List<PlotData> plotDataList, List<KeybindHolder> keyBindings) {
         super(Text.literal("Garden Plot Teleport"));
         this.plotDataList = plotDataList;
         this.keyBindings = keyBindings;
@@ -38,7 +38,7 @@ public class PlotScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        for (KeyBinding key : keyBindings) {
+        for (KeybindHolder key : keyBindings) {
             if (key.matchesKey(keyCode, scanCode)) {
                 selectRowColumn(keyBindings.indexOf(key));
                 return true;
@@ -146,6 +146,7 @@ public class PlotScreen extends Screen {
 
             if (rc[0] == selectedRowIndex && rc[1] == i) {
                 button.getButtonWidget().onPress();
+                close();
             }
         }
 

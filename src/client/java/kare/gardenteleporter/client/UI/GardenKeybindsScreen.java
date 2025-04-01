@@ -1,10 +1,10 @@
 package kare.gardenteleporter.client.UI;
 
-import kare.gardenteleporter.client.KeybindStorage;
+import kare.gardenteleporter.client.keybinds.KeybindHolder;
+import kare.gardenteleporter.client.keybinds.KeybindStorage;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
@@ -16,12 +16,12 @@ import java.util.Map;
 
 public class GardenKeybindsScreen extends Screen {
     private static final Text TITLE_TEXT = Text.translatable("controls.gardenteleporter.title");
-    private final List<KeyBinding> keybinds;
-    private final Map<KeyBinding, ButtonWidget> buttons = new HashMap<>();
+    private final List<KeybindHolder> keybinds;
+    private final Map<KeybindHolder, ButtonWidget> buttons = new HashMap<>();
     @Nullable
-    private KeyBinding selectedKeyBinding;
+    private KeybindHolder selectedKeyBinding;
 
-    public GardenKeybindsScreen(List<KeyBinding> keybinds) {
+    public GardenKeybindsScreen(List<KeybindHolder> keybinds) {
         super(TITLE_TEXT);
         this.keybinds = keybinds;
     }
@@ -29,7 +29,7 @@ public class GardenKeybindsScreen extends Screen {
     @Override
     protected void init() {
         int y = 40; // Starting Y position for buttons
-        for (KeyBinding keyBinding : keybinds) {
+        for (KeybindHolder keyBinding : keybinds) {
             buttons.put(keyBinding, createButton(keyBinding, y));
             y += 24;
         }
@@ -38,8 +38,8 @@ public class GardenKeybindsScreen extends Screen {
 
         // Reset all button
         ButtonWidget resetAllButton = ButtonWidget.builder(Text.translatable("controls.resetAll"), button -> {
-            for (KeyBinding keyBinding : keybinds) {
-                keyBinding.setBoundKey(keyBinding.getDefaultKey());
+            for (KeybindHolder keyBinding : keybinds) {
+                keyBinding.setKeyCode(keyBinding.getDefaultKey());
 
                 var but = buttons.get(keyBinding);
                 var ybut = but.getY();
@@ -56,9 +56,7 @@ public class GardenKeybindsScreen extends Screen {
                 .dimensions(this.width / 2 - 100, y, 200, 20).build());
     }
 
-    private ButtonWidget createButton(KeyBinding keyBinding, int y) {
-
-
+    private ButtonWidget createButton(KeybindHolder keyBinding, int y) {
         var but = ButtonWidget.builder(
                 Text.translatable(keyBinding.getTranslationKey()).append(": ").append(keyBinding.getBoundKeyLocalizedText()),
                 button -> this.selectedKeyBinding = keyBinding
@@ -77,9 +75,9 @@ public class GardenKeybindsScreen extends Screen {
             remove(but);
 
             if (keyCode == 256) { // Escape key clears the keybind
-                this.selectedKeyBinding.setBoundKey(InputUtil.UNKNOWN_KEY);
+                this.selectedKeyBinding.setKeyCode(InputUtil.UNKNOWN_KEY.getCode());
             } else {
-                this.selectedKeyBinding.setBoundKey(InputUtil.fromKeyCode(keyCode, scanCode));
+                this.selectedKeyBinding.setKeyCode(keyCode);
             }
 
             buttons.put(this.selectedKeyBinding, createButton(this.selectedKeyBinding, y));

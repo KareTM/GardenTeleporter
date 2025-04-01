@@ -1,10 +1,9 @@
-package kare.gardenteleporter.client;
+package kare.gardenteleporter.client.keybinds;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +18,10 @@ public class KeybindStorage {
     private static final File CONFIG_FILE = new File("config/gardenteleporter_keybinds.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    public static void saveKeybinds(List<KeyBinding> keybinds) {
-        Map<String, String> keybindMap = new HashMap<>();
-        for (KeyBinding keybind : keybinds) {
-            keybindMap.put(keybind.getTranslationKey(), keybind.getBoundKeyTranslationKey());
+    public static void saveKeybinds(List<KeybindHolder> keybinds) {
+        Map<String, Integer> keybindMap = new HashMap<>();
+        for (KeybindHolder keybind : keybinds) {
+            keybindMap.put(keybind.getTranslationKey(), keybind.getKeyCode());
         }
 
         try (Writer writer = new FileWriter(CONFIG_FILE)) {
@@ -32,22 +31,24 @@ public class KeybindStorage {
         }
     }
 
-    public static void loadKeybinds(List<KeyBinding> keybinds) {
+    public static void loadKeybinds(List<KeybindHolder> keybinds) {
         if (!CONFIG_FILE.exists()) return;
 
         try (Reader reader = new FileReader(CONFIG_FILE)) {
-            Type type = new TypeToken<Map<String, String>>() {
+            Type type = new TypeToken<Map<String, Integer>>() {
             }.getType();
-            Map<String, String> keybindMap = GSON.fromJson(reader, type);
+            Map<String, Integer> keybindMap = GSON.fromJson(reader, type);
 
-            for (KeyBinding keybind : keybinds) {
+            for (KeybindHolder keybind : keybinds) {
                 if (keybindMap.containsKey(keybind.getTranslationKey())) {
-                    String keyCode = keybindMap.get(keybind.getTranslationKey());
-                    keybind.setBoundKey(InputUtil.fromTranslationKey(keyCode));
+                    keybind.setKeyCode(keybindMap.get(keybind.getTranslationKey()));
                 }
             }
         } catch (IOException e) {
             log.error("Failed to load keybinds", e);
+        } catch (JsonSyntaxException e) {
+            CONFIG_FILE.delete();
+            log.warn("Failed to load keybinds, malformed JSON", e);
         }
     }
 }

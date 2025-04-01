@@ -3,6 +3,8 @@ package kare.gardenteleporter.client;
 import kare.gardenteleporter.client.PlotData.PlotDataManager;
 import kare.gardenteleporter.client.UI.GardenKeybindsScreen;
 import kare.gardenteleporter.client.UI.PlotScreen;
+import kare.gardenteleporter.client.keybinds.KeybindHolder;
+import kare.gardenteleporter.client.keybinds.KeybindStorage;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -55,41 +57,32 @@ public class GardenTeleporterClient implements ClientModInitializer {
     }
 
 
-    private List<KeyBinding> getKeybinds() {
-        var hotkey1 = new KeyBinding(
+    private List<KeybindHolder> getKeybinds() {
+        var hotkey1 = new KeybindHolder(
                 "key.gardenteleporter.key1", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_1, // The keycode of the key
-                "category.gardenteleporter.keys" // The translation key of the keybinding's category.
+                GLFW.GLFW_KEY_1 // The keycode of the key
         );
 
-        var hotkey2 = new KeyBinding(
+        var hotkey2 = new KeybindHolder(
                 "key.gardenteleporter.key2", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_2, // The keycode of the key
-                "category.gardenteleporter.keys" // The translation key of the keybinding's category.
+                GLFW.GLFW_KEY_2 // The keycode of the key
         );
 
-        var hotkey3 = new KeyBinding(
+        var hotkey3 = new KeybindHolder(
                 "key.gardenteleporter.key3", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_3, // The keycode of the key
-                "category.gardenteleporter.keys" // The translation key of the keybinding's category.
+                GLFW.GLFW_KEY_3 // The keycode of the key
         );
 
-        var hotkey4 = new KeyBinding(
+        var hotkey4 = new KeybindHolder(
                 "key.gardenteleporter.key4", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_4, // The keycode of the key
-                "category.gardenteleporter.keys" // The translation key of the keybinding's category.
+                GLFW.GLFW_KEY_4 // The keycode of the key
         );
 
-        var hotkey5 = new KeyBinding(
+        var hotkey5 = new KeybindHolder(
                 "key.gardenteleporter.key5", // The translation key of the keybinding's name
-                InputUtil.Type.KEYSYM, // The type of the keybinding, KEYSYM for keyboard, MOUSE for mouse.
-                GLFW.GLFW_KEY_5, // The keycode of the key
-                "category.gardenteleporter.keys" // The translation key of the keybinding's category.
+                GLFW.GLFW_KEY_5 // The keycode of the key
         );
+
         return List.of(hotkey1, hotkey2, hotkey3, hotkey4, hotkey5);
     }
 }
